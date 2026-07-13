@@ -42,13 +42,7 @@ export default defineConfig({
     },
     assetsInlineLimit: 4096,
     chunkSizeWarningLimit: 1000,
-    minify: 'terser',
-    terserOptions: {
-      compress: {
-        drop_console: true,
-        drop_debugger: true,
-      }
-    }
+    // 使用Vite默认的esbuild压缩，已经足够好了
   },
   resolve: {
     alias: {
