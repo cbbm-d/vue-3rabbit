@@ -23,8 +23,29 @@ export default defineConfig({
         ElementPlusResolver({ importStyle: "sass" }),
       ],
     }),
-    vueDevTools(),
+    process.env.NODE_ENV === 'development' ? vueDevTools() : null,
   ],
+  build: {
+    // 代码分割，提取公共模块
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'element-plus': ['element-plus'],
+          'vue-vendor': ['vue', 'vue-router', 'pinia', 'axios'],
+        }
+      }
+    },
+    // 开启gzip压缩
+    assetsInlineLimit: 4096,
+    chunkSizeWarningLimit: 1000,
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: true, // 移除console.log
+        drop_debugger: true, // 移除debugger
+      }
+    }
+  },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
