@@ -29,20 +29,24 @@ export default defineConfig({
     // 代码分割，提取公共模块
     rollupOptions: {
       output: {
-        manualChunks: {
-          'element-plus': ['element-plus'],
-          'vue-vendor': ['vue', 'vue-router', 'pinia', 'axios'],
+        // Vite 8.x要求manualChunks必须是函数
+        manualChunks(id) {
+          if (id.includes('element-plus')) {
+            return 'element-plus'
+          }
+          if (id.includes('vue') || id.includes('vue-router') || id.includes('pinia') || id.includes('axios')) {
+            return 'vue-vendor'
+          }
         }
       }
     },
-    // 开启gzip压缩
     assetsInlineLimit: 4096,
     chunkSizeWarningLimit: 1000,
     minify: 'terser',
     terserOptions: {
       compress: {
-        drop_console: true, // 移除console.log
-        drop_debugger: true, // 移除debugger
+        drop_console: true,
+        drop_debugger: true,
       }
     }
   },
